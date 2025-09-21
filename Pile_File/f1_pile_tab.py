@@ -27,17 +27,12 @@ class Pile_tab:
     def est_vide(self):
         """renvoie un booléen indiquant si la pile est vide
         """
-
-        #TODO
-        pass
+        return self.sommet == -1
 
     def est_pleine(self):
         """renvoie un booléen indiquant si la pile est pleine
         """
-
-        
-        #TODO
-        pass
+        return self.sommet == len(self.tab) - 1
 
     def empiler(self, x):
         """ajoute x au sommet de la pile
@@ -52,10 +47,8 @@ class Pile_tab:
         if self.est_pleine():
             raise Exception("La pile est pleine !")
         else:
-    
-            #TODO
-            pass
-
+            self.sommet += 1
+            self.tab[self.sommet] = x
 
     def depiler(self):
         """renvoie et supprime l'élément au sommet de la pile
@@ -67,9 +60,8 @@ class Pile_tab:
         if self.est_vide():
             raise Exception("La pile est vide !")
         else:
-            
-            #TODO
-            pass
+            self.sommet -= 1
+            return self.tab[self.sommet + 1]
         
 class TestPile(unittest.TestCase):
     

@@ -39,16 +39,14 @@ class File_tab:
         Returns:
             booleen
         """
-        #TODO
-        pass
+        return self.n == 0
 
     def est_pleine(self):
         """renvoie un booléne indiquant si la file est pleine
         Returns:
             booleen
         """
-        #TODO
-        pass
+        return self.n == self.N
 
     def ajouter(self,x):
         """ajoute un élément dans la file
@@ -58,10 +56,11 @@ class File_tab:
         Raises:
             Exception : si la file est pleine
         """
-
-        #TODO
-        pass
-
+        if self.est_pleine():
+            raise Exception("La file est pleine !")
+        else:
+            self.tab[(self.sortie + self.n) % self.N] = x
+            self.n += 1
 
     def defiler(self):
         """renvoie et supprime l'élément le plus ancien
@@ -70,11 +69,12 @@ class File_tab:
         Returns:
             un élément de type quelconque
         """
-
-        #TODO
-        pass
-
-
+        if self.est_vide():
+            raise Exception("La file est vide !")
+        element = self.tab[self.sortie]
+        self.sortie = (self.sortie + 1) % self.N
+        self.n -= 1
+        return element
 
 class TestFile(unittest.TestCase):
     
