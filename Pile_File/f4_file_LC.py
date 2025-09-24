@@ -23,11 +23,19 @@ class File_LC:
     def __init__(self):
         """création file vide
         """
-
-        self.entrée = None #dernier maillon de la liste, où on fait les ajouts
+        self.entree = None #dernier maillon de la liste, où on fait les ajouts
         self.sortie = None #premier maillon de la liste, prêt à sortir
 
+    def est_vide(self):
+        """retourne True si la file est vide"""
+        return self.sortie is None
 
-""" 
-A vous d'écrire les méthodes de la file ainsi que les tests !
-"""
+    def enfiler(self, x):
+        """Enfile un élément x à l'entrée de la file"""
+        if self.entree is None:
+            self.entree = x
+            self.sortie = x
+        else:
+            self
+
+
