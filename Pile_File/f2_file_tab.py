@@ -58,9 +58,8 @@ class File_tab:
         """
         if self.est_pleine():
             raise Exception("La file est pleine !")
-        else:
-            self.tab[(self.sortie + self.n) % self.N] = x
-            self.n += 1
+        self.tab[(self.sortie + self.n) % self.N] = x
+        self.n += 1
 
     def defiler(self):
         """renvoie et supprime l'élément le plus ancien
