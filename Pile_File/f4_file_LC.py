@@ -24,7 +24,8 @@ class File_LC:
         """création file vide
         """
         self.entree = None #dernier maillon de la liste, où on fait les ajouts
-        self.sortie = None #premier maillon de la liste, prêt à sortir
+        self.sortie = None #premier maillon de la lis
+        # te, prêt à sortir
 
     def est_vide(self):
         """retourne True si la file est vide"""
