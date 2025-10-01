@@ -49,7 +49,13 @@ def tri_fusion(tab):
     Returns:
         list : tri de tab
     """
-
+    n = len(tab)
+    if n <= 1:
+        return tab
+    m = n//2
+    tab1 = tri_fusion(tab[:m])
+    tab2 = tri_fusion(tab[m:])
+    return fusion_croissante(tab1, tab2)
 
 
 def fusion_iterative(tab):
@@ -62,7 +68,14 @@ def fusion_iterative(tab):
     Returns:
         list : tri de tab
     """
-    pass
+    l = deque()
+    for element in tab:
+        l.append([element])
+    while len(l) > 1:
+        l.append(fusion_croissante(l[0], l[1]))
+        l.popleft()
+        l.popleft()
+    return l[0]
 
 def sous_tableaux_monotones(tab):
     """renvoie une liste des sous-tableaux monotones qui constituent tab
@@ -116,6 +129,12 @@ class TestFusion(unittest.TestCase):
                 a_trier = list(p)
                 a_trier = tri_fusion(a_trier)
                 self.assertEqual(a_trier, croissante)
+
+    def test_fusion_iterative(self):
+
+        tab0 = fusion_iterative([1,2,3,56,2,3])
+        print(tab0)
+        self.assertEqual(tab0,[1,2,2,3,3,56])
 
 if __name__ == '__main__':
     unittest.main()
