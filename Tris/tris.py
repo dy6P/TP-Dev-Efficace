@@ -75,6 +75,8 @@ def fusion_iterative(tab):
         l.append(fusion_croissante(l[0], l[1]))
         l.popleft()
         l.popleft()
+    if len(l) == 0:
+        return []
     return l[0]
 
 def sous_tableaux_monotones(tab):
@@ -133,8 +135,10 @@ class TestFusion(unittest.TestCase):
     def test_fusion_iterative(self):
 
         tab0 = fusion_iterative([1,2,3,56,2,3])
-        print(tab0)
+        tab1 = fusion_iterative([])
+        print(tab0, tab1)
         self.assertEqual(tab0,[1,2,2,3,3,56])
+        self.assertEqual(tab1,[])
 
 if __name__ == '__main__':
     unittest.main()
