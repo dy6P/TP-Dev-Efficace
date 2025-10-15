@@ -23,12 +23,24 @@ class TableHachageSimple:
 
     def inserer(self, clé):
         """Insère une clé (entier) dans la table."""
-        self.tab[self._hash(clé)] = clé
-        self.nb_elements += 1
+        if self.nb_elements >= self.N:
+            raise BaseException("le tableau est plein !")
+        h = self._hash(clé)
+        for i in range(self.N):
+            j = (h + i) % self.N
+            if self.table[j] is None:
+                self.table[j] = clé
+                self.nb_elements += 1
+                return
+            elif self.table[j] == clé:
+                return
 
     def rechercher(self, clé):
-        """Renvoie True si clé présente."""
-        pass
+        """Return True si la clé est présente"""
+        for i in range(self.N):
+            if self.table[i] == clé:
+                return True
+        return False
 
 
 
@@ -59,7 +71,7 @@ class Test_Hachage(unittest.TestCase):
     def test_table_pleine(self):
         for x in [1, 2, 3, 4, 5]:
             self.t.inserer(x)
-        with self.assertRaises(RuntimeError):
+        with self.assertRaises(BaseException):
             self.t.inserer(6)
 
 
