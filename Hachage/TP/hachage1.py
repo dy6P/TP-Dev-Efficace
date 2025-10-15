@@ -23,7 +23,8 @@ class TableHachageSimple:
 
     def inserer(self, clé):
         """Insère une clé (entier) dans la table."""
-        pass
+        self.tab[self._hash(clé)] = clé
+        self.nb_elements += 1
 
     def rechercher(self, clé):
         """Renvoie True si clé présente."""
