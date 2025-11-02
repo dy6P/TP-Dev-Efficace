@@ -7,6 +7,7 @@
 
 import unittest
 
+
 class TableHachageSimple:
     """Table de hachage avec sondage linéaire et suppression (tombstones)."""
 
@@ -22,30 +23,49 @@ class TableHachageSimple:
 
     def inserer(self, clé):
         if self.nb_elements >= self.N:
-            raise BaseException("le tableau est plein !")
+            raise RuntimeError("Table pleine")
+
+        # on fait la recherche en premier
+        # un peu plus long mais plus simple
+        if self.rechercher(clé):
+            return
+
         h = self._hash(clé)
+
         for i in range(self.N):
             j = (h + i) % self.N
-            if self.table[j] is None or self.table[j] is 'T':
+            if self.table[j] is None or self.table[j] == 'T':
+                # case libre
                 self.table[j] = clé
                 self.nb_elements += 1
                 return
-            elif self.table[j] == clé:
-                return
+        raise RuntimeError("Table saturée")
 
     def rechercher(self, clé):
+        h = self._hash(clé)
         for i in range(self.N):
-            if self.table[i] == clé:
+            j = (h + i) % self.N
+            v = self.table[j]
+            if v is None:
+                return False
+            if v == clé:
                 return True
         return False
 
     def supprimer(self, clé):
         """Marque la case comme supprimée  avec 'T' (tombstone)."""
-        if not self.rechercher(clé):
-            raise BaseException("la clé n'existe pas dans le tableau !")
-        self.table[self._hash(clé)] = 'T'
-        self.nb_elements -= 1
-    
+        h = self._hash(clé)
+        for i in range(self.N):
+            j = (h + i) % self.N
+            v = self.table[j]
+            if v is None:
+                raise KeyError(clé)
+            if v == clé:
+                self.table[j] = 'T'
+                self.nb_elements -= 1
+                return
+        raise KeyError(clé)
+
 
 class Test_TableHachage_Avec_Suppression(unittest.TestCase):
     """Tests pour la table de hachage avec suppression et tombstones."""
@@ -68,7 +88,6 @@ class Test_TableHachage_Avec_Suppression(unittest.TestCase):
         self.t.supprimer(10)
         self.assertFalse(self.t.rechercher(10))
         self.assertTrue(self.t.rechercher(17))  # doit rester accessible
-        
 
     def test_reinsertion_tombstone(self):
         self.t.inserer(3)
@@ -78,13 +97,13 @@ class Test_TableHachage_Avec_Suppression(unittest.TestCase):
         self.assertTrue(self.t.rechercher(10))
 
     def test_suppression_inexistante(self):
-        with self.assertRaises(BaseException):
+        with self.assertRaises(KeyError):
             self.t.supprimer(42)
 
     def test_table_pleine(self):
         for x in [1, 2, 3, 4, 5, 6, 7]:
             self.t.inserer(x)
-        with self.assertRaises(BaseException):
+        with self.assertRaises(RuntimeError):
             self.t.inserer(8)
 
     def test_scenario_complet(self):
@@ -111,7 +130,6 @@ class Test_TableHachage_Avec_Suppression(unittest.TestCase):
         for x in actifs:
             self.assertTrue(self.t.rechercher(x))
 
-        
 
 if __name__ == "__main__":
     unittest.main()

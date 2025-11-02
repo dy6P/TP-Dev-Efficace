@@ -13,8 +13,8 @@ class TableHachageSimple:
     """Table de hachage avec sondage linéaire, sans suppression."""
 
     def __init__(self, N):
-        self.N = N                      # taille fixe de la table
-        self.table = [None] * N         # cases vides initialement
+        self.N = N  # taille fixe de la table
+        self.table = [None] * N  # cases vides initialement
         self.nb_elements = 0
 
     def _hash(self, clé):
@@ -23,31 +23,35 @@ class TableHachageSimple:
 
     def inserer(self, clé):
         """Insère une clé (entier) dans la table."""
+
         if self.nb_elements >= self.N:
-            raise BaseException("le tableau est plein !")
+            raise RuntimeError("Table pleine")
+
+        h = self._hash(clé)  # indice de départ
+        for i in range(self.N):
+            j = (h + i) % self.N  # indice où on tente une insertion
+
+            if self.table[j] is None:  # insertion réussie
+                self.table[j] = clé
+                self.nb_elements += 1
+                return
+
+            elif self.table[j] == clé:
+                # déjà présent, on ne réinsère pas
+                return
+
+    def rechercher(self, clé):
+        """Renvoie True si clé présente."""
         h = self._hash(clé)
         for i in range(self.N):
             j = (h + i) % self.N
             if self.table[j] is None:
-                self.table[j] = clé
-                self.nb_elements += 1
-                return
-            elif self.table[j] == clé:
-                return
-
-    def rechercher(self, clé):
-        """Return True si la clé est présente"""
-        for i in range(self.N):
-            if self.table[i] == clé:
+                return False  # trou -> clé absente
+            if self.table[j] == clé:
                 return True
         return False
 
 
-
-
-
-
-    
 class Test_Hachage(unittest.TestCase):
     """Tests pour la table de hachage simple sans suppression."""
 
@@ -71,9 +75,8 @@ class Test_Hachage(unittest.TestCase):
     def test_table_pleine(self):
         for x in [1, 2, 3, 4, 5]:
             self.t.inserer(x)
-        with self.assertRaises(BaseException):
+        with self.assertRaises(RuntimeError):
             self.t.inserer(6)
-
 
 
 if __name__ == "__main__":
